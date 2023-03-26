@@ -1,0 +1,26 @@
+//User registration request
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+	"email" : "e@xample.com",
+	"username" : "example",
+	"password" : "lalala"
+}
+
+###
+
+// Login request
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+	"email" : "e@xample.com",
+	"password" : "lalala"
+}
+
+###
+
+// Get protected endpoint content
+GET http://localhost:8081/weatherforecast
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZXhhbXBsZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImVAeGFtcGxlLmNvbSIsImV4cCI6MTY4MjQzODY1OH0.uMyAmoqoINguCJOcDawqsKASsHqVYgsz3EPDvS935Po
