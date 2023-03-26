@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  jwtproducer:
+    build:
+      context: ./AuthJwt
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:80"
+
+  jwtconsumer:
+    build:
+      context: ./JwtConsumer
+      dockerfile: ./Dockerfile
+    ports:
+      - "8081:80"

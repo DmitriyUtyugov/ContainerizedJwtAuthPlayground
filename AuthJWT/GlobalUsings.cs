@@ -1,0 +1,9 @@
+﻿global using AuthJWT.Models;
+global using AuthJWT.Data;
+global using AuthJWT.Dtos;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using AuthJWT.Services;
+global using AuthJWT.Services.Interfaces;
