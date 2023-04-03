@@ -15,7 +15,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Vault"]!)),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
     };
 });
 

@@ -10,4 +10,3 @@ var validStrictTypedJwtToken = new JwtSecurityToken(jwtEncodedString: validStrin
 
 foreach(var claim in validStrictTypedJwtToken.Claims)
     Console.WriteLine(claim.Type.ToString() + " : " + claim.Value);
-

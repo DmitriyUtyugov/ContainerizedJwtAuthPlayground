@@ -14,20 +14,21 @@ public class JwtProvider : IJwtProvider
 
     public string CreateJwtToken(User user)
     {
-        List<Claim> claims = new() 
-        {       
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Email, user.Email),
+        List<Claim> claims = new()
+        {   new Claim(JwtRegisteredClaimNames.Iss, "localhost"), // should be a domain name
+            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString("G")),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Vault"]!));
 
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(30),
+            expires: DateTime.UtcNow.AddSeconds(10),
             signingCredentials: credentials
          );
 
