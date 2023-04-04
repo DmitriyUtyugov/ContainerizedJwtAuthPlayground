@@ -20,4 +20,6 @@ public class User
 
     [Required]
     public int DeviceId { get; set; }
+
+    public RefreshToken RefreshToken { get; set; }
 }

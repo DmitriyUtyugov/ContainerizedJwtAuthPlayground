@@ -1,7 +1,8 @@
-﻿using AuthJWT.Services.Interfaces;
+﻿using AuthJWT.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AuthJWT.Services;
@@ -12,7 +13,7 @@ public class JwtProvider : IJwtProvider
 
     public JwtProvider(IConfiguration configuration) => _configuration = configuration;
 
-    public string CreateJwtToken(User user)
+    public string CreateAccessToken(User user)
     {
         List<Claim> claims = new()
         {   new Claim(JwtRegisteredClaimNames.Iss, "localhost"), // should be a domain name
@@ -28,12 +29,24 @@ public class JwtProvider : IJwtProvider
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddSeconds(10),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
          );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
         return jwt;
+    }
+
+    public RefreshToken CreateRefreshToken()
+    {
+        var refreshToken = new RefreshToken()
+        {
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(30),
+        };
+
+        return refreshToken;
     }
 }
