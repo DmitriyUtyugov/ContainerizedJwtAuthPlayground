@@ -16,8 +16,8 @@ public class JwtProvider : IJwtProvider
     {
         List<Claim> claims = new()
         {   new Claim(JwtRegisteredClaimNames.Iss, "localhost"), // should be a domain name
-            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, user.Username),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString("G")),
         };
