@@ -1,4 +1,5 @@
-﻿using AuthJWT.Services.Interfaces;
+﻿using AuthJWT.Models;
+using AuthJWT.Services.Interfaces;
 using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -46,20 +47,42 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public ActionResult<string> LogInUser(UserLoginDto userLoginDto)
+    public ActionResult<IEnumerable<string>> LogInUser(UserLoginDto userLoginDto)
     {
         var userExists = _userRepository.UserWithEmailExists(userLoginDto.Email);
         var user = _userRepository.GetUserByEmail(userLoginDto.Email);
         var passwordValidationSuccessfull = BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.PasswordHash);
 
-        if(userExists is false || passwordValidationSuccessfull is false)
-        {
+        if(userExists is false || passwordValidationSuccessfull is false) {
             return BadRequest("Login or password is incorrect");
         }
 
-        var jwtToken = _jwtProvider.CreateJwtToken(user);
+        var jwtToken = _jwtProvider.CreateAccessToken(user);
+        var refreshToken = _jwtProvider.CreateRefreshToken();
 
-        return Ok(jwtToken);
+        user.RefreshToken = refreshToken;
+
+        return Ok(
+            //new List<string> { jwtToken, refreshToken.Token }
+            refreshToken
+        );
+    }
+
+    [HttpGet("refresh-token")]
+    public ActionResult<string> RefreshToken(UserRefreshTokenDto userDto)
+    {
+        var tokenFetchedFromDb = "1231223423423";
+        var user = _userRepository.GetUserByEmail(userDto.Email);
+
+        if(userDto.RefreshToken.Token != tokenFetchedFromDb)
+            return Unauthorized("invalid refresh token");
+
+        if(userDto.RefreshToken.ExpiresAt < DateTime.UtcNow)
+            return Unauthorized("Token expired");
+
+        var newAccessToken = _jwtProvider.CreateAccessToken(user);
+
+        return Ok(newAccessToken);
     }
 
     private string HashPassword(string password)

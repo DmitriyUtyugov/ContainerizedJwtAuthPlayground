@@ -1,6 +1,9 @@
-﻿namespace AuthJWT.Services.Interfaces;
+﻿using AuthJWT.Models;
+
+namespace AuthJWT.Services.Interfaces;
 
 public interface IJwtProvider
 {
-    string CreateJwtToken(User user);
+    string CreateAccessToken(User user);
+    RefreshToken CreateRefreshToken();
 }
